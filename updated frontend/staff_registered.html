@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MediQueue</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            max-width: 500px;
+            width: 100%;
+            padding: 40px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 28px;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 14px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #555;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: border-color 0.3s;
+        }
+
+        input:focus, select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .role-selector {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .role-option {
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            background: white;
+        }
+
+        .role-option:hover {
+            border-color: #667eea;
+            background: #f8f9ff;
+        }
+
+        .role-option.selected {
+            border-color: #667eea;
+            background: #667eea;
+            color: white;
+        }
+
+        .role-icon {
+            font-size: 24px;
+            margin-bottom: 5px;
+        }
+
+        .role-name {
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .message {
+            margin-top: 20px;
+            padding: 12px;
+            border-radius: 8px;
+            text-align: center;
+            font-size: 14px;
+            display: none;
+        }
+
+        .message.success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .message.error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .info-box {
+            background: #e7f3ff;
+            border-left: 4px solid #2196F3;
+            padding: 12px;
+            margin-bottom: 20px;
+            border-radius: 4px;
+            font-size: 13px;
+            color: #0c5460;
+        }
+
+        .employee-id-preview {
+            margin-top: 10px;
+            padding: 10px;
+            background: #f8f9fa;
+            border-radius: 6px;
+            font-size: 13px;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <img src="logo.png" style="height:100px;width:100px;margin-left: 150px;">
+        <h1>🏥 Staff Registration</h1>
+        <p class="subtitle">Register Staff Members</p>
+
+        <div class="info-box">
+            ℹ️ Employee IDs will be auto-generated based on role:
+            <br>• Admin: 100XXX
+            <br>• Doctor: 200XXX  
+            <br>• Nurse: 300XXX
+        </div>
+
+        <form id="registrationForm">
+            <div class="form-group">
+                <label>Select Role *</label>
+                <div class="role-selector">
+                    <div class="role-option" data-role="admin">
+                        <div class="role-icon">👨‍💼</div>
+                        <div class="role-name">Admin</div>
+                    </div>
+                    <div class="role-option" data-role="doctor">
+                        <div class="role-icon">👨‍⚕️</div>
+                        <div class="role-name">Doctor</div>
+                    </div>
+                    <div class="role-option" data-role="nurse">
+                        <div class="role-icon">👩‍⚕️</div>
+                        <div class="role-name">Nurse</div>
+                    </div>
+                </div>
+                <input type="hidden" id="role" name="role" required>
+            </div>
+
+            <div class="form-group">
+                <label for="employee_id">Employee ID *</label>
+                <input type="text" id="employee_id" name="employee_id" 
+                       placeholder="e.g., 200001" 
+                       pattern="[0-9]{6}" 
+                       maxlength="6"
+                       required>
+                <div class="employee-id-preview" id="idHint" style="display: none;"></div>
+            </div>
+
+            <div class="form-group">
+                <label for="name">Full Name *</label>
+                <input type="text" id="name" name="name" 
+                       placeholder="e.g., Dr. John Smith" required>
+            </div>
+
+            <div class="form-group">
+                <label for="email">Email Address *</label>
+                <input type="email" id="email" name="email" 
+                       placeholder="doctor@hospital.com" required>
+            </div>
+
+            <div class="form-group">
+                <label for="password">Password *</label>
+                <input type="password" id="password" name="password" 
+                       placeholder="Minimum 6 characters" 
+                       minlength="6" required>
+            </div>
+
+            <button type="submit" class="btn">Register Staff Member</button>
+        </form>
+
+        <div id="message" class="message"></div>
+    </div>
+
+    <script>
+        const API_URL = 'http://localhost:8000';
+        
+        // Role selection
+        const roleOptions = document.querySelectorAll('.role-option');
+        const roleInput = document.getElementById('role');
+        const employeeIdInput = document.getElementById('employee_id');
+        const idHint = document.getElementById('idHint');
+
+        const rolePrefixes = {
+            admin: '100',
+            doctor: '200',
+            nurse: '300'
+        };
+
+        roleOptions.forEach(option => {
+            option.addEventListener('click', function() {
+                roleOptions.forEach(opt => opt.classList.remove('selected'));
+                this.classList.add('selected');
+                const role = this.dataset.role;
+                roleInput.value = role;
+                
+                // Show hint for employee ID
+                const prefix = rolePrefixes[role];
+                idHint.style.display = 'block';
+                idHint.textContent = `💡 ${role.charAt(0).toUpperCase() + role.slice(1)} IDs start with ${prefix}XXX (e.g., ${prefix}001)`;
+                
+                // Set placeholder
+                employeeIdInput.placeholder = `${prefix}001`;
+            });
+        });
+
+        // Form submission
+        document.getElementById('registrationForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const messageDiv = document.getElementById('message');
+            const submitBtn = e.target.querySelector('.btn');
+            
+            // Get form data
+            const formData = {
+                username: document.getElementById('employee_id').value,
+                password: document.getElementById('password').value,
+                name: document.getElementById('name').value,
+                email: document.getElementById('email').value,
+                role: document.getElementById('role').value
+            };
+
+            // Validate role is selected
+            if (!formData.role) {
+                showMessage('Please select a role', 'error');
+                return;
+            }
+
+            // Validate employee ID format
+            const prefix = rolePrefixes[formData.role];
+            if (!formData.username.startsWith(prefix)) {
+                showMessage(`Employee ID must start with ${prefix} for ${formData.role}`, 'error');
+                return;
+            }
+
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Registering...';
+
+            try {
+                // Direct database insert using API endpoint
+                const response = await fetch(`${API_URL}/api/admin/register-staff`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(formData)
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    showMessage(`✅ ${formData.role.toUpperCase()} registered successfully! Username: ${formData.username}`, 'success');
+                    document.getElementById('registrationForm').reset();
+                    roleOptions.forEach(opt => opt.classList.remove('selected'));
+                    idHint.style.display = 'none';
+                } else {
+                    showMessage(`❌ ${data.detail || 'Registration failed'}`, 'error');
+                }
+            } catch (error) {
+                // If API endpoint doesn't exist, show instructions
+                showMessage(`⚠️ API endpoint not found. Add this endpoint to your FastAPI backend:\n\n@app.post("/api/admin/register-staff")\nasync def register_staff(staff_data: dict, db: Session = Depends(get_db)):\n    # Add staff registration logic`, 'error');
+                console.error('Error:', error);
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Register Staff Member';
+            }
+        });
+
+        function showMessage(text, type) {
+            const messageDiv = document.getElementById('message');
+            messageDiv.textContent = text;
+            messageDiv.className = `message ${type}`;
+            messageDiv.style.display = 'block';
+            
+            if (type === 'success') {
+                setTimeout(() => {
+                    messageDiv.style.display = 'none';
+                }, 5000);
+            }
+        }
+    </script>
+</body>
+</html>

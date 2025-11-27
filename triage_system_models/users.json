@@ -1,0 +1,44 @@
+{
+  "admin": {
+    "password": "240be518fabd2724ddb6f04eeb1da5967448d7e831c08c8fa822809f74c720a9",
+    "role": "admin",
+    "name": "System Administrator"
+  },
+  "doctor1": {
+    "password": "f348d5628621f3d8f59c8cabda0f8eb0aa7e0514a90be7571020b1336f26c113",
+    "role": "doctor",
+    "name": "Dr. Sarah Johnson"
+  },
+  "patient1": {
+    "password": "d4587ea9ead060c13fd994f21ecfa7926272a78854a2c20136b10a3c9e53e71e",
+    "role": "patient",
+    "name": "John Doe"
+  },
+  "hussain22": {
+    "username": "hussain22",
+    "password": "f2329ac9c8bd4fa15e6d53c0adcd134221b18681cb847ee22e76e89be1fe28b9",
+    "name": "Hussain",
+    "email": "alisyedhussain22@gmail.com",
+    "role": "patient",
+    "created_at": "2025-11-10T00:56:06.336660",
+    "last_login": "2025-11-10T01:51:01.427334"
+  },
+  "abbas22": {
+    "username": "abbas22",
+    "password": "ef797c8118f02dfb649607dd5d3f8c7623048c9c063d532cc95c5ed7a898a64f",
+    "name": "Abbas",
+    "email": "hussainalibukhari99@hotmail.com",
+    "role": "doctor",
+    "created_at": "2025-11-10T01:10:48.055374",
+    "last_login": null
+  },
+  "fatima55": {
+    "username": "fatima55",
+    "password": "ef797c8118f02dfb649607dd5d3f8c7623048c9c063d532cc95c5ed7a898a64f",
+    "name": "Fatima",
+    "email": "fatima@gmail.com",
+    "role": "admin",
+    "created_at": "2025-11-10T01:49:47.665062",
+    "last_login": null
+  }
+}
